@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, memo } from "react";
 import { Animated, Text } from "react-native";
 
 const List = ({ item, index }) => {
@@ -40,4 +40,4 @@ const List = ({ item, index }) => {
   );
 };
 
-export default List;
+export default memo(List);
