@@ -1,39 +1,42 @@
-import React, { useEffect, useState, useRef } from "react";
-import { View, Text, FlatList, Animated, Dimensions } from "react-native";
+import React, { useEffect, useCallback } from "react";
+import { Animated, Text } from "react-native";
 
-const List = () => {
-  const [data, setData] = useState([]);
+const List = ({ item, index }) => {
+  const scale = new Animated.Value(0);
+  console.log("teste de render");
 
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) => response.json())
-      .then((json) => setData(json));
-  }, []);
-
-  const renderItem = ({ item, index }) => {
-    return (
-      <View
-        style={{
-          padding: 16,
-          backgroundColor: "white",
-          margin: 8,
-          borderRadius: 8,
-        }}
-      >
-        <Text style={{ fontSize: 18, fontWeight: "bold" }}>{item.name}</Text>
-        <Text>{item.email}</Text>
-        <Text style={{ color: "gray" }}>{item.username}</Text>
-      </View>
-    );
+  const animaTrasition = () => {
+    Animated.spring(scale, {
+      toValue: 1,
+      duration: 400,
+      friction: 6,
+      delay: index * 100,
+      useNativeDriver: true,
+    }).start();
   };
 
+  useEffect(() => {
+    animaTrasition();
+  });
+
   return (
-    <Animated.FlatList
-      data={data}
-      renderItem={renderItem}
-      ListEmptyComponent={<Text>Carregando...</Text>}
-      keyExtractor={(item) => String(item.id)}
-    />
+    <Animated.View
+      style={{
+        padding: 16,
+        backgroundColor: "white",
+        margin: 8,
+        borderRadius: 8,
+        transform: [
+          {
+            scale: scale,
+          },
+        ],
+      }}
+    >
+      <Text style={{ fontSize: 18, fontWeight: "bold" }}>{item.name}</Text>
+      <Text>{item.email}</Text>
+      <Text style={{ color: "gray" }}>{item.username}</Text>
+    </Animated.View>
   );
 };
 
